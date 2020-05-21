@@ -19,7 +19,7 @@ import org.hibernate.Transaction;
 
 @Dao
 public class MovieSessionDaoImpl implements MovieSessionDao {
-    private static final Logger LOGGER = Logger.getLogger(MovieDaoImpl.class);
+    private static final Logger LOGGER = Logger.getLogger(MovieSessionDaoImpl.class);
 
     @Override
     public MovieSession add(MovieSession movieSession) {
