@@ -20,18 +20,25 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User add(User user) {
+        Session session = null;
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            session.save(user);
-            //transaction.commit();
-            LOGGER.info("user " + user.getName() + " was added to DB");
+            Long userId = (Long) session.save(user);
+            transaction.commit();
+            user.setId(userId);
+            LOGGER.info(String.format("User with email %s successfully added.", user.getEmail()));
             return user;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
             throw new DataProcessingException("Can't insert user entity", e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 

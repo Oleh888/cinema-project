@@ -23,10 +23,14 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
 
     @Override
     public MovieSession add(MovieSession movieSession) {
+        Session session = null;
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            session.save(movieSession);
+            Long movieSessionId = (Long) session.save(movieSession);
+            transaction.commit();
+            movieSession.setId(movieSessionId);
             LOGGER.info("movie session " + movieSession + " was added to DB");
             return movieSession;
         } catch (Exception e) {
@@ -34,6 +38,10 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
                 transaction.rollback();
             }
             throw new DataProcessingException("Can't insert movieSession entity", e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 
