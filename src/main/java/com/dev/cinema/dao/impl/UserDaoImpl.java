@@ -5,6 +5,7 @@ import com.dev.cinema.exceptions.DataProcessingException;
 import com.dev.cinema.lib.Dao;
 import com.dev.cinema.model.User;
 import com.dev.cinema.util.HibernateUtil;
+import java.util.Optional;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -36,7 +37,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User findByEmail(String email) {
+    public Optional<User> findByEmail(String email) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<User> criteriaQuery =
@@ -44,7 +45,7 @@ public class UserDaoImpl implements UserDao {
             Root<User> root = criteriaQuery.from(User.class);
             Predicate predicateForEmail = criteriaBuilder.equal(root.get("email"), email);
             criteriaQuery.where(predicateForEmail);
-            return session.createQuery(criteriaQuery).getSingleResult();
+            return Optional.of(session.createQuery(criteriaQuery).getSingleResult());
         } catch (Exception e) {
             throw new DataProcessingException(
                     "Can't get user with email " + email, e);
