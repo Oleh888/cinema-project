@@ -52,8 +52,7 @@ public class UserDaoImpl implements UserDao {
             criteriaQuery.where(predicateForEmail);
             return Optional.ofNullable(session.createQuery(criteriaQuery).uniqueResult());
         } catch (Exception e) {
-            throw new DataProcessingException(
-                    "Can't get user with email " + email, e);
+            throw new DataProcessingException("Can't get user with email " + email, e);
         }
     }
 }
