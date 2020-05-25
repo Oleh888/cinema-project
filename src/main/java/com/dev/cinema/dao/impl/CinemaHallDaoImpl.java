@@ -22,9 +22,8 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            Long cinemaHallId = (Long) session.save(cinemaHall);
+            session.save(cinemaHall);
             transaction.commit();
-            cinemaHall.setId(cinemaHallId);
             LOGGER.info("cinema hall " + cinemaHall + " was added to DB");
             return cinemaHall;
         } catch (Exception e) {
