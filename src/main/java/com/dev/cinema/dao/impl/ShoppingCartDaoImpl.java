@@ -53,7 +53,7 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
             Predicate predicateForUser = criteriaBuilder.equal(root.get("user"), user);
             criteriaQuery.where(predicateForUser);
             ShoppingCart shoppingCart = session.createQuery(criteriaQuery).uniqueResult();
-            shoppingCart.getTickets().forEach(e -> Hibernate.initialize(e.getId()));
+            Hibernate.initialize(shoppingCart.getTickets());
             return shoppingCart;
         } catch (Exception e) {
             throw new DataProcessingException("Can't get shopping cart by user: " + user, e);
