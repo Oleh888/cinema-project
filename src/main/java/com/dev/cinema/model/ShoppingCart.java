@@ -1,6 +1,5 @@
 package com.dev.cinema.model;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,7 +17,6 @@ public class ShoppingCart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDateTime orderDate;
     @OneToOne
     @MapsId
     @JoinColumn(name = "shopping_cart_id")
@@ -32,14 +30,6 @@ public class ShoppingCart {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public LocalDateTime getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(LocalDateTime orderDate) {
-        this.orderDate = orderDate;
     }
 
     public User getUser() {
@@ -60,7 +50,7 @@ public class ShoppingCart {
 
     @Override
     public String toString() {
-        return "ShoppingCart{" + "id=" + id + ", orderDate=" + orderDate
-                + ", user=" + user + ", tickets=" + tickets + '}';
+        return "ShoppingCart{" + "id=" + id + ", user="
+                + user + ", tickets=" + tickets + '}';
     }
 }
