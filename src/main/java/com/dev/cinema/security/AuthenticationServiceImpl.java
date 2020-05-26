@@ -11,7 +11,7 @@ import com.dev.cinema.util.HashUtil;
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
     @Inject
-    ShoppingCartService shoppingCartService;
+    private ShoppingCartService shoppingCartService;
     @Inject
     private UserService userService;
 
