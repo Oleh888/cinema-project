@@ -16,7 +16,7 @@ public class Ticket {
     private Long id;
     @ManyToOne
     private Movie movie;
-    @OneToOne
+    @ManyToOne
     private CinemaHall cinemaHall;
     private LocalDateTime showTime;
     @OneToOne
