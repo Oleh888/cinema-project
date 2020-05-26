@@ -19,7 +19,7 @@ public class Ticket {
     @ManyToOne
     private CinemaHall cinemaHall;
     private LocalDateTime showTime;
-    @OneToOne
+    @ManyToOne
     private User user;
 
     public Long getId() {
