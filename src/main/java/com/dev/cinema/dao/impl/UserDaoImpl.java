@@ -16,7 +16,7 @@ import org.hibernate.Transaction;
 
 @Dao
 public class UserDaoImpl implements UserDao {
-    private static final Logger LOGGER = Logger.getLogger(UserDao.class);
+    private static final Logger LOGGER = Logger.getLogger(UserDaoImpl.class);
 
     @Override
     public User add(User user) {
