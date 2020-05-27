@@ -11,6 +11,7 @@ import com.dev.cinema.security.AuthenticationService;
 import com.dev.cinema.service.CinemaHallService;
 import com.dev.cinema.service.MovieService;
 import com.dev.cinema.service.MovieSessionService;
+import com.dev.cinema.service.OrderService;
 import com.dev.cinema.service.ShoppingCartService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -52,5 +53,9 @@ public class Main {
         ShoppingCart userBucket = shoppingCartService.getByUser(user);
         User user2 = authenticationService
                 .register("Bob", "bob@ukr.net", "1");
+
+        OrderService orderService = (OrderService) INJECTOR.getInstance(OrderService.class);
+        System.out.println(orderService.completeOrder(userBucket.getTickets(), user2));
+        System.out.println(orderService.getOrderHistory(user2).get(0).getTickets());
     }
 }
