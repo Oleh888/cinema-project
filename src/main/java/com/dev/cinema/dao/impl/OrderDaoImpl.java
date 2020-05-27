@@ -9,10 +9,10 @@ import com.dev.cinema.util.HibernateUtil;
 import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.apache.log4j.Logger;
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -49,11 +49,10 @@ public class OrderDaoImpl implements OrderDao {
             CriteriaQuery<Order> criteriaQuery =
                     criteriaBuilder.createQuery(Order.class);
             Root<Order> root = criteriaQuery.from(Order.class);
+            root.fetch("tickets", JoinType.LEFT);
             Predicate predicateForOrder = criteriaBuilder.equal(root.get("user"), user);
             criteriaQuery.where(predicateForOrder);
-            List<Order> orders = session.createQuery(criteriaQuery).getResultList();
-            orders.forEach(o -> Hibernate.initialize(o.getTickets()));
-            return orders;
+            return session.createQuery(criteriaQuery).getResultList();
         } catch (Exception e) {
             throw new DataProcessingException("Can't get order by user: " + user, e);
         }
