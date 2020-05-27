@@ -35,7 +35,7 @@ public class OrderDaoImpl implements OrderDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new DataProcessingException("Can't insert ticket entity", e);
+            throw new DataProcessingException("Can't insert order entity", e);
         } finally {
             if (session != null) {
                 session.close();
@@ -55,7 +55,7 @@ public class OrderDaoImpl implements OrderDao {
             orders.forEach(o -> Hibernate.initialize(o.getTickets()));
             return orders;
         } catch (Exception e) {
-            throw new DataProcessingException("Can't get shopping cart by user: " + user, e);
+            throw new DataProcessingException("Can't get order by user: " + user, e);
         }
     }
 }
