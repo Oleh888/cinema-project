@@ -21,7 +21,7 @@ public class MovieSessionController {
         this.movieSessionMapper = movieSessionMapper;
     }
 
-    @PostMapping(value = "/add")
+    @PostMapping
     public MovieSession addMovieSession(
             @RequestBody MovieSessionRequestDto movieSessionRequestDto) {
         return movieSessionMapper.getMovieSessionFromRequestDto(movieSessionRequestDto);
