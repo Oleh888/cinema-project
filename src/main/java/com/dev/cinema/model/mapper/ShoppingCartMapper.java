@@ -24,12 +24,12 @@ public class ShoppingCartMapper {
 
     public void addMovieSession(Long movieSessionId, String email) {
         shoppingCartService.addSession(movieSessionService
-                        .getMovieSessionById(movieSessionId),
+                        .getById(movieSessionId),
                 userService.findByEmail(email).get());
     }
 
     public List<TicketResponseDto> getTicketResponseDtoByUserId(Long userId) {
-        return shoppingCartService.getByUser(userService.getUserById(userId))
+        return shoppingCartService.getByUser(userService.getById(userId))
                 .getTickets().stream()
                 .map(this::transferTicketToDto)
                 .collect(Collectors.toList());

@@ -4,10 +4,7 @@ import com.dev.cinema.dao.CinemaHallDao;
 import com.dev.cinema.exceptions.DataProcessingException;
 import com.dev.cinema.model.CinemaHall;
 import java.util.List;
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -59,7 +56,7 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
     @Override
     public CinemaHall getById(Long id) {
         try (Session session = sessionFactory.openSession()) {
-          return session.get(CinemaHall.class, id);
+            return session.get(CinemaHall.class, id);
         } catch (Exception e) {
             throw new DataProcessingException("Can't get cinema-hall with id " + id, e);
         }

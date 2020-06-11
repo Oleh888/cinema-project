@@ -25,12 +25,12 @@ public class OrderMapper {
     }
 
     public Order getOrderFromUserId(Long userId) {
-        User user = userService.getUserById(userId);
+        User user = userService.getById(userId);
         return orderService.completeOrder(shoppingCartService.getByUser(user).getTickets(), user);
     }
 
     public List<TicketResponseDto> getTicketResponseDtoByUserId(Long userId) {
-        return orderService.getOrderHistory(userService.getUserById(userId)).stream()
+        return orderService.getOrderHistory(userService.getById(userId)).stream()
                 .flatMap(order -> order.getTickets().stream())
                 .map(this::transferTicketToDto)
                 .collect(Collectors.toList());
