@@ -59,13 +59,7 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
     @Override
     public CinemaHall getById(Long id) {
         try (Session session = sessionFactory.openSession()) {
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<CinemaHall> criteriaQuery =
-                    criteriaBuilder.createQuery(CinemaHall.class);
-            Root<CinemaHall> root = criteriaQuery.from(CinemaHall.class);
-            Predicate predicateForId = criteriaBuilder.equal(root.get("id"), id);
-            criteriaQuery.where(predicateForId);
-            return session.createQuery(criteriaQuery).uniqueResult();
+          return session.get(CinemaHall.class, id);
         } catch (Exception e) {
             throw new DataProcessingException("Can't get cinema-hall with id " + id, e);
         }
