@@ -25,7 +25,7 @@ public class CinemaHallController {
         return cinemaHallMapper.getCinemaHallFromRequestDto(cinemaHallRequestDto);
     }
 
-    @GetMapping(value = "/all")
+    @GetMapping
     public List<CinemaHallResponseDto> getAll() {
         return cinemaHallMapper.getCinemaHallResponseDto();
     }
