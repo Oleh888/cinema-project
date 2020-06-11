@@ -20,7 +20,7 @@ public class CinemaHallController {
         this.cinemaHallMapper = cinemaHallMapper;
     }
 
-    @PostMapping(value = "/add")
+    @PostMapping
     public CinemaHall addCinemaHall(@RequestBody CinemaHallRequestDto cinemaHallRequestDto) {
         return cinemaHallMapper.getCinemaHallFromRequestDto(cinemaHallRequestDto);
     }
