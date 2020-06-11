@@ -1,8 +1,10 @@
 package com.dev.cinema.controller;
 
+import com.dev.cinema.model.Order;
 import com.dev.cinema.model.Ticket;
+import com.dev.cinema.model.User;
 import com.dev.cinema.model.dto.TicketResponseDto;
-import com.dev.cinema.service.MovieSessionService;
+import com.dev.cinema.service.OrderService;
 import com.dev.cinema.service.ShoppingCartService;
 import com.dev.cinema.service.UserService;
 import java.util.List;
@@ -14,32 +16,29 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/shopping-carts")
-public class ShoppingCartController {
-    private final ShoppingCartService shoppingCartService;
-    private final MovieSessionService movieSessionService;
+@RequestMapping(value = "/orders")
+public class OrderController {
+    private final OrderService orderService;
     private final UserService userService;
+    private final ShoppingCartService shoppingCartService;
 
-    public ShoppingCartController(ShoppingCartService shoppingCartService,
-                                  MovieSessionService movieSessionService,
-                                  UserService userService) {
-        this.shoppingCartService = shoppingCartService;
-        this.movieSessionService = movieSessionService;
+    public OrderController(OrderService orderService, UserService userService,
+                           ShoppingCartService shoppingCartService) {
+        this.orderService = orderService;
         this.userService = userService;
+        this.shoppingCartService = shoppingCartService;
     }
 
-    @PostMapping(value = "/add-movie-session")
-    public void addMovieSession(@RequestParam Long movieSessionId,
-                                @RequestParam String email) {
-        shoppingCartService.addSession(movieSessionService
-                .getMovieSessionById(movieSessionId),
-                userService.findByEmail(email).get());
+    @PostMapping(value = "/complete")
+    public Order completeOrder(@RequestParam Long userId) {
+        User user = userService.getUserById(userId);
+        return orderService.completeOrder(shoppingCartService.getByUser(user).getTickets(), user);
     }
 
-    @GetMapping(value = "/by-user")
-    public List<TicketResponseDto> getByUser(@RequestParam Long userId) {
-        return shoppingCartService.getByUser(userService.getUserById(userId))
-                .getTickets().stream()
+    @GetMapping(value = "/all")
+    public List<TicketResponseDto> getUserOrders(@RequestParam Long userId) {
+        return orderService.getOrderHistory(userService.getUserById(userId)).stream()
+                .flatMap(order -> order.getTickets().stream())
                 .map(this::transferTicketToDto)
                 .collect(Collectors.toList());
     }
