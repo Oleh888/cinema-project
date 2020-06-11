@@ -63,8 +63,8 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
             CriteriaQuery<CinemaHall> criteriaQuery =
                     criteriaBuilder.createQuery(CinemaHall.class);
             Root<CinemaHall> root = criteriaQuery.from(CinemaHall.class);
-            Predicate predicateForEmail = criteriaBuilder.equal(root.get("id"), id);
-            criteriaQuery.where(predicateForEmail);
+            Predicate predicateForId = criteriaBuilder.equal(root.get("id"), id);
+            criteriaQuery.where(predicateForId);
             return session.createQuery(criteriaQuery).uniqueResult();
         } catch (Exception e) {
             throw new DataProcessingException("Can't get cinema-hall with id " + id, e);

@@ -58,4 +58,19 @@ public class UserDaoImpl implements UserDao {
             throw new DataProcessingException("Can't get user with email " + email, e);
         }
     }
+
+    @Override
+    public User getUserById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<User> criteriaQuery =
+                    criteriaBuilder.createQuery(User.class);
+            Root<User> root = criteriaQuery.from(User.class);
+            Predicate predicateForEmail = criteriaBuilder.equal(root.get("id"), id);
+            criteriaQuery.where(predicateForEmail);
+            return session.createQuery(criteriaQuery).uniqueResult();
+        } catch (Exception e) {
+            throw new DataProcessingException("Can't get user with id " + id, e);
+        }
+    }
 }

@@ -63,8 +63,8 @@ public class MovieDaoImpl implements MovieDao {
             CriteriaQuery<Movie> criteriaQuery =
                     criteriaBuilder.createQuery(Movie.class);
             Root<Movie> root = criteriaQuery.from(Movie.class);
-            Predicate predicateForEmail = criteriaBuilder.equal(root.get("id"), id);
-            criteriaQuery.where(predicateForEmail);
+            Predicate predicateForId = criteriaBuilder.equal(root.get("id"), id);
+            criteriaQuery.where(predicateForId);
             return session.createQuery(criteriaQuery).uniqueResult();
         } catch (Exception e) {
             throw new DataProcessingException("Can't get movie with id " + id, e);

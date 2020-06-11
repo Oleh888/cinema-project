@@ -2,6 +2,7 @@ package com.dev.cinema.dao.impl;
 
 import com.dev.cinema.dao.MovieSessionDao;
 import com.dev.cinema.exceptions.DataProcessingException;
+import com.dev.cinema.model.Movie;
 import com.dev.cinema.model.MovieSession;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -62,6 +63,21 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
         } catch (Exception e) {
             throw new DataProcessingException(
                     "Can't get movie session for movie with id " + movieId, e);
+        }
+    }
+
+    @Override
+    public MovieSession getMovieSessionById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<MovieSession> criteriaQuery =
+                    criteriaBuilder.createQuery(MovieSession.class);
+            Root<MovieSession> root = criteriaQuery.from(MovieSession.class);
+            Predicate predicateForId = criteriaBuilder.equal(root.get("id"), id);
+            criteriaQuery.where(predicateForId);
+            return session.createQuery(criteriaQuery).uniqueResult();
+        } catch (Exception e) {
+            throw new DataProcessingException("Can't get movie-session with id " + id, e);
         }
     }
 }
