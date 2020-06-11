@@ -24,7 +24,7 @@ public class OrderController {
         return orderMapper.getOrderFromUserId(userId);
     }
 
-    @GetMapping(value = "/all")
+    @GetMapping
     public List<TicketResponseDto> getUserOrders(@RequestParam Long userId) {
         return orderMapper.getTicketResponseDtoByUserId(userId);
     }
