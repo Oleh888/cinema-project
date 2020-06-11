@@ -4,7 +4,10 @@ import com.dev.cinema.dao.MovieDao;
 import com.dev.cinema.exceptions.DataProcessingException;
 import com.dev.cinema.model.Movie;
 import java.util.List;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -50,6 +53,21 @@ public class MovieDaoImpl implements MovieDao {
             return session.createQuery(criteriaQuery).getResultList();
         } catch (Exception e) {
             throw new DataProcessingException("Can't get all movie", e);
+        }
+    }
+
+    @Override
+    public Movie getByMovieId(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Movie> criteriaQuery =
+                    criteriaBuilder.createQuery(Movie.class);
+            Root<Movie> root = criteriaQuery.from(Movie.class);
+            Predicate predicateForEmail = criteriaBuilder.equal(root.get("id"), id);
+            criteriaQuery.where(predicateForEmail);
+            return session.createQuery(criteriaQuery).uniqueResult();
+        } catch (Exception e) {
+            throw new DataProcessingException("Can't get movie with id " + id, e);
         }
     }
 }
