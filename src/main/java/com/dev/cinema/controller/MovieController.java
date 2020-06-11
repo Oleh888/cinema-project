@@ -20,12 +20,12 @@ public class MovieController {
         this.movieMapper = movieMapper;
     }
 
-    @PostMapping(value = "/add")
+    @PostMapping
     public Movie addMovie(@RequestBody MovieRequestDto movieRequestDto) {
         return movieMapper.getMovieFromRequestDto(movieRequestDto);
     }
 
-    @GetMapping(value = "/all")
+    @GetMapping
     public List<MovieResponseDto> getAllMovies() {
         return movieMapper.getMovieResponseDto();
     }
