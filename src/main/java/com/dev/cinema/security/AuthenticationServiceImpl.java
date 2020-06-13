@@ -11,11 +11,13 @@ import org.springframework.stereotype.Service;
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final ShoppingCartService shoppingCartService;
     private final UserService userService;
+    private final HashUtil hashUtil;
 
     public AuthenticationServiceImpl(ShoppingCartService shoppingCartService,
-                                     UserService userService) {
+                                     UserService userService, HashUtil hashUtil) {
         this.shoppingCartService = shoppingCartService;
         this.userService = userService;
+        this.hashUtil = hashUtil;
     }
 
     @Override
@@ -34,14 +36,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setName(name);
         user.setEmail(email);
         user.setPassword(password);
-        user.setSalt(HashUtil.getSalt());
-        user.setPassword(HashUtil.hashPassword(user.getPassword(), user.getSalt()));
+        user.setSalt(hashUtil.getSalt());
+        user.setPassword(hashUtil.hashPassword(user.getPassword(), user.getSalt()));
         userService.add(user);
         shoppingCartService.registerNewShoppingCart(user);
         return user;
     }
 
     private boolean isValid(User user, String password) {
-        return HashUtil.hashPassword(password, user.getSalt()).equals(user.getPassword());
+        return hashUtil.hashPassword(password, user.getSalt()).equals(user.getPassword());
     }
 }
