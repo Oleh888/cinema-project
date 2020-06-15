@@ -5,6 +5,7 @@ import com.dev.cinema.model.dto.MovieSessionRequestDto;
 import com.dev.cinema.model.dto.MovieSessionResponseDto;
 import com.dev.cinema.model.mapper.MovieSessionMapper;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +24,7 @@ public class MovieSessionController {
 
     @PostMapping
     public MovieSession addMovieSession(
-            @RequestBody MovieSessionRequestDto movieSessionRequestDto) {
+            @RequestBody @Valid MovieSessionRequestDto movieSessionRequestDto) {
         return movieSessionMapper.getMovieSessionFromRequestDto(movieSessionRequestDto);
     }
 

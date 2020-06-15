@@ -1,8 +1,13 @@
 package com.dev.cinema.model.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class MovieSessionRequestDto {
+    @NotNull(message = "The time can not be null")
     private String showTime;
+    @NotNull(message = "The movieId can not be null")
     private Long movieId;
+    @NotNull(message = "The cinemaHall can not be null")
     private Long cinemaHallId;
 
     public String getShowTime() {
