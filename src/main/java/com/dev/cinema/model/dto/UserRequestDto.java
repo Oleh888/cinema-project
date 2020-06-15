@@ -1,9 +1,12 @@
 package com.dev.cinema.model.dto;
 
 import com.dev.cinema.security.EmailValidation;
+import com.dev.cinema.security.PasswordValidation;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+@PasswordValidation
 public class UserRequestDto {
     @NotNull
     private String name;
