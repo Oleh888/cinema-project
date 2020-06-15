@@ -2,21 +2,22 @@ package com.dev.cinema.model.dto;
 
 import com.dev.cinema.security.EmailValidation;
 import com.dev.cinema.security.PasswordValidation;
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @PasswordValidation
 public class UserRequestDto {
-    @NotNull
+    @NotNull(message = "The userName can not be null")
     private String name;
-    @NotNull
+    @NotNull(message = "The email can not be null")
     @Min(4)
-    @EmailValidation
+    @EmailValidation(message = "Your email is not valid")
     private String email;
-    @NotNull
+    @NotNull(message = "The password can not be null")
     @Min(6)
     private String password;
+    @NotNull(message = "The repeatPassword can not be null")
+    @Min(6)
     private String repeatPassword;
 
     public String getRepeatPassword() {

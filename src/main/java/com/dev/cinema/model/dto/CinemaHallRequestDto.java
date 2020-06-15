@@ -3,9 +3,9 @@ package com.dev.cinema.model.dto;
 import javax.validation.constraints.NotNull;
 
 public class CinemaHallRequestDto {
-    @NotNull
+    @NotNull(message = "The capacity can not be null")
     private int capacity;
-    @NotNull
+    @NotNull(message = "The description can not be null")
     private String description;
 
     public int getCapacity() {
