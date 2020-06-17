@@ -8,10 +8,14 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
+@RequestMapping("/inject")
 public class InjectDataController {
-    private RoleService roleService;
-    private UserService userService;
+    private final RoleService roleService;
+    private final UserService userService;
 
     @Autowired
     public InjectDataController(RoleService roleService, UserService userService) {
@@ -29,7 +33,7 @@ public class InjectDataController {
     public String injectAdminToDB() {
         User admin = new User();
         admin.setEmail("admin@ukr.net");
-        admin.setPassword("4321");
+        admin.setPassword("123456");
         Role adminRole = roleService.getRoleByName("ADMIN");
         admin.setRoles(Set.of(adminRole));
         userService.add(admin);
