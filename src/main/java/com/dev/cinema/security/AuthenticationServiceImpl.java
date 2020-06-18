@@ -2,22 +2,28 @@ package com.dev.cinema.security;
 
 import com.dev.cinema.exceptions.AuthenticationException;
 import com.dev.cinema.model.User;
+import com.dev.cinema.service.RoleService;
 import com.dev.cinema.service.ShoppingCartService;
 import com.dev.cinema.service.UserService;
-import com.dev.cinema.util.HashUtil;
+import java.util.Set;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final ShoppingCartService shoppingCartService;
     private final UserService userService;
-    private final HashUtil hashUtil;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleService roleService;
 
     public AuthenticationServiceImpl(ShoppingCartService shoppingCartService,
-                                     UserService userService, HashUtil hashUtil) {
+                                     UserService userService,
+                                     PasswordEncoder passwordEncoder,
+                                     RoleService roleService) {
         this.shoppingCartService = shoppingCartService;
         this.userService = userService;
-        this.hashUtil = hashUtil;
+        this.passwordEncoder = passwordEncoder;
+        this.roleService = roleService;
     }
 
     @Override
@@ -33,17 +39,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public User register(String name, String email, String password) {
         User user = new User();
-        user.setName(name);
         user.setEmail(email);
         user.setPassword(password);
-        user.setSalt(hashUtil.getSalt());
-        user.setPassword(hashUtil.hashPassword(user.getPassword(), user.getSalt()));
-        userService.add(user);
-        shoppingCartService.registerNewShoppingCart(user);
-        return user;
+        user.setRoles(Set.of(roleService.getRoleByName("USER")));
+        User userFromDB = userService.add(user);
+        shoppingCartService.registerNewShoppingCart(userFromDB);
+        return userFromDB;
     }
 
     private boolean isValid(User user, String password) {
-        return hashUtil.hashPassword(password, user.getSalt()).equals(user.getPassword());
+        return user != null && passwordEncoder.matches(password, user.getPassword());
     }
 }
