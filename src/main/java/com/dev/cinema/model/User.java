@@ -1,6 +1,5 @@
 package com.dev.cinema.model;
 
-import java.util.Arrays;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +22,6 @@ public class User {
     @Column(unique = true)
     private String email;
     private String password;
-    private byte[] salt;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
@@ -72,17 +70,9 @@ public class User {
         this.password = password;
     }
 
-    public byte[] getSalt() {
-        return salt;
-    }
-
-    public void setSalt(byte[] salt) {
-        this.salt = salt;
-    }
-
     @Override
     public String toString() {
         return "User{" + "id=" + id + ", name='" + name + '\'' + ", login='" + email + '\''
-                + ", password='" + password + '\'' + ", salt=" + Arrays.toString(salt) + '}';
+                + ", password='" + password + '\'' + ", salt=" + '}';
     }
 }
