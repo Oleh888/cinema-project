@@ -11,7 +11,9 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class RoleDaoImpl implements RoleDao {
     private static final Logger LOGGER = Logger.getLogger(RoleDaoImpl.class);
     private final SessionFactory sessionFactory;
