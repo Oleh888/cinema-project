@@ -10,7 +10,6 @@ public class UserRequestDto {
     @NotNull(message = "The userName can not be null")
     private String name;
     @NotNull(message = "The email can not be null")
-    @Min(4)
     @EmailValidation(message = "Your email is not valid")
     private String email;
     @NotNull(message = "The password can not be null")
