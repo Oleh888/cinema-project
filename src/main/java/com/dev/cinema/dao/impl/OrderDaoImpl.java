@@ -13,37 +13,28 @@ import javax.persistence.criteria.Root;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class OrderDaoImpl implements OrderDao {
+public class OrderDaoImpl extends GenericDaoImp<Order> implements OrderDao {
     private static final Logger LOGGER = Logger.getLogger(OrderDaoImpl.class);
-    @Autowired
-    private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
+
+    public OrderDaoImpl(SessionFactory sessionFactory) {
+        super(sessionFactory);
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public Order add(Order order) {
-        Session session = null;
-        Transaction transaction = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            session.save(order);
-            transaction.commit();
-            LOGGER.info(String.format("Order with id: %d was added to the DB.", order.getId()));
-            return order;
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw new DataProcessingException("Can't insert order entity", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
+        order = super.add(order);
+        LOGGER.info(String.format("Order with id: %d was added to the DB.", order.getId()));
+        return order;
+    }
+
+    @Override
+    public Order getById(Long id) {
+        return super.getById(id, Order.class);
     }
 
     public List<Order> getOrderHistory(User user) {

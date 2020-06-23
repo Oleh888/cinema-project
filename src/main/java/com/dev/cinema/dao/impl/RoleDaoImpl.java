@@ -10,39 +10,28 @@ import javax.persistence.criteria.Root;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class RoleDaoImpl implements RoleDao {
+public class RoleDaoImpl extends GenericDaoImp<Role> implements RoleDao {
     private static final Logger LOGGER = Logger.getLogger(RoleDaoImpl.class);
     private final SessionFactory sessionFactory;
 
     public RoleDaoImpl(SessionFactory sessionFactory) {
+        super(sessionFactory);
         this.sessionFactory = sessionFactory;
     }
 
     @Override
     public Role add(Role role) {
-        Session session = null;
-        Transaction transaction = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            session.save(role);
-            transaction.commit();
-            LOGGER.info(String.format("Role with id - %s successfully added.", role.getId()));
-            return role;
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw new DataProcessingException("Can't insert Role entity", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
+        role = super.add(role);
+        LOGGER.info(String.format("Role with id - %s successfully added.", role.getId()));
+        return role;
+    }
+
+    @Override
+    public Role getById(Long id) {
+        return super.getById(id, Role.class);
     }
 
     @Override
