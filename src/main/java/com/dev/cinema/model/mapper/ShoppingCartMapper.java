@@ -25,7 +25,7 @@ public class ShoppingCartMapper {
     public void addMovieSession(Long movieSessionId, String email) {
         shoppingCartService.addSession(movieSessionService
                         .getById(movieSessionId),
-                userService.findByEmail(email).get());
+                userService.getByEmail(email).get());
     }
 
     public List<TicketResponseDto> getTicketResponseDtoByUserId(Long userId) {

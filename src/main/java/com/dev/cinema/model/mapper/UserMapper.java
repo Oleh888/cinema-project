@@ -15,7 +15,7 @@ public class UserMapper {
     public UserResponseDto getUserResponseDto(String email) {
         UserResponseDto userResponseDto = new UserResponseDto();
         userResponseDto.setEmail(email);
-        userResponseDto.setName(userService.findByEmail(email).get().getName());
+        userResponseDto.setName(userService.getByEmail(email).get().getName());
         return userResponseDto;
     }
 }
