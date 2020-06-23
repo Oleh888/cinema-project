@@ -31,7 +31,7 @@ public class ShoppingCartController {
 
     @GetMapping(value = "/by-user")
     public List<TicketResponseDto> getByUser(Authentication authentication) {
-        User user = userService.findByEmail(authentication.getName()).get();
+        User user = userService.getByEmail(authentication.getName()).get();
         return shoppingCartMapper.getTicketResponseDtoByUserId(user.getId());
     }
 }

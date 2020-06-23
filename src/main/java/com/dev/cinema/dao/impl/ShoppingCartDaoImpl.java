@@ -13,37 +13,29 @@ import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ShoppingCartDaoImpl implements ShoppingCartDao {
+public class ShoppingCartDaoImpl extends GenericDaoImp<ShoppingCart> implements ShoppingCartDao {
     private static final Logger LOGGER = Logger.getLogger(ShoppingCartDaoImpl.class);
-    @Autowired
-    private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
+
+    public ShoppingCartDaoImpl(SessionFactory sessionFactory) {
+        super(sessionFactory);
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public ShoppingCart add(ShoppingCart shoppingCart) {
-        Session session = null;
-        Transaction transaction = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            session.save(shoppingCart);
-            transaction.commit();
-            LOGGER.info(String.format("Shopping cart with id: %d was added to the DB.",
-                    shoppingCart.getId()));
-            return shoppingCart;
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw new DataProcessingException("Can't insert shopping cart entity", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
+        shoppingCart = super.add(shoppingCart);
+        LOGGER.info(String.format("Shopping cart with id: %d was added to the DB.",
+                shoppingCart.getId()));
+        return shoppingCart;
+    }
+
+    @Override
+    public ShoppingCart getById(Long id) {
+        return super.getById(id, ShoppingCart.class);
     }
 
     @Override

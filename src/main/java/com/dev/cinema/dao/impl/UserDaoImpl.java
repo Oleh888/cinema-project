@@ -11,41 +11,27 @@ import javax.persistence.criteria.Root;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserDaoImpl implements UserDao {
+public class UserDaoImpl extends GenericDaoImp<User> implements UserDao {
     private static final Logger LOGGER = Logger.getLogger(UserDaoImpl.class);
-    @Autowired
-    private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
 
-    @Override
-    public User add(User user) {
-        Session session = null;
-        Transaction transaction = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            session.save(user);
-            transaction.commit();
-            LOGGER.info(String.format("User with email %s successfully added.", user.getEmail()));
-            return user;
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw new DataProcessingException("Can't insert user entity", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
+    public UserDaoImpl(SessionFactory sessionFactory) {
+        super(sessionFactory);
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public User add(User user) {
+        user = super.add(user);
+        LOGGER.info(String.format("User with email %s successfully added.", user.getEmail()));
+        return user;
+    }
+
+    @Override
+    public Optional<User> getByEmail(String email) {
         try (Session session = sessionFactory.openSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<User> criteriaQuery =
@@ -61,10 +47,6 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getById(Long id) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.get(User.class, id);
-        } catch (Exception e) {
-            throw new DataProcessingException("Can't get user with id " + id, e);
-        }
+        return super.getById(id, User.class);
     }
 }

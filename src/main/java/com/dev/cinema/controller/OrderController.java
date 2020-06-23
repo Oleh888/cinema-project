@@ -25,13 +25,13 @@ public class OrderController {
 
     @PostMapping(value = "/complete")
     public Order completeOrder(Authentication authentication) {
-        User user = userService.findByEmail(authentication.getName()).get();
+        User user = userService.getByEmail(authentication.getName()).get();
         return orderMapper.getOrderFromUserId(user.getId());
     }
 
     @GetMapping
     public List<TicketResponseDto> getUserOrders(Authentication authentication) {
-        User user = userService.findByEmail(authentication.getName()).get();
+        User user = userService.getByEmail(authentication.getName()).get();
         return orderMapper.getTicketResponseDtoByUserId(user.getId());
     }
 }

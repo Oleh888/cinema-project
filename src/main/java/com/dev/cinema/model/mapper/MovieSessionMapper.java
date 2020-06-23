@@ -37,7 +37,7 @@ public class MovieSessionMapper {
 
     public List<MovieSessionResponseDto> getMovieSessionResponseDto(
             Long movieId, String localDate) {
-        return movieSessionService.findAvailableSessions(movieId, LocalDate.parse(localDate))
+        return movieSessionService.getAvailableSessions(movieId, LocalDate.parse(localDate))
                 .stream()
                 .map(this::getMovieSessionResponseDto)
                 .collect(Collectors.toList());
